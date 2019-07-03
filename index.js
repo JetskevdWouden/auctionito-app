@@ -4,6 +4,8 @@ const db = require('./db');
 
 //MODELS
 const User = require('./user/model');
+const Advert = require('./advert/model');
+const ContactInfo = require('./contact_info/model');
 
 //ROUTERS
 
