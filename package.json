@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/JetskevdWouden/auctionito-app#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "pg": "^7.11.0",
+    "sequelize": "^5.9.2"
   }
 }
