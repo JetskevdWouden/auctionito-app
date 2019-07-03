@@ -59,7 +59,7 @@ router.get('/adverts/:id', (req, res, next) => {
 // '/adverts/users/:id
 // get all ads belonging to user with id --> :id
 router.get('/adverts/users/:id', (req, res, next) => {
-    const seller_id = req.params.id             //this correct?
+    const seller_id = req.params.id
     Advert
         .findAll({
             where: {
@@ -67,13 +67,20 @@ router.get('/adverts/users/:id', (req, res, next) => {
             }
         })
         .then(adverts => {
-            //check is adverts arent empty if so --> user had nothing for sale
-            res
+            if (adverts.length === 0) {
+                res
+                    .status(200)
+                    .send({
+                        message: "THIS USER CURRENTLY HAS NOTHING FOR SALE"
+                    })
+            } else {
+                res
                 .status(200)
                 .send({
                     message: `ALL ADVERTS OF USER WITH ID ${seller_id}`,
                     adverts: adverts
                 })
+            }
         })
         .catch(error => next(error))
 })

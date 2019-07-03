@@ -76,31 +76,42 @@ router.get('/users/:id', auth, (req, res, next) => {
         .catch(error => next(error))
 })
 
-//update user info --> phone first name last name
-// router.put('/users/:id', auth, (req, res, next) => {
-//     const seller_id = req.params.id
-//     const thisUserId = req.user.id
-//     User
-//         .findByPk(seller_id)
-//         .then(user => {
-//             if (!user) {
-//                 res
-//                     .status(404)
-//                     .send({
-//                         message: "THIS USER DOES NOT EXIST"
-//                     })
-//             } else if (user.id !== thisUserId) {
-//                 res
-//                     .status(404)
-//                     .send({
-//                         message: "YOU CANNOT EDIT SOME ONE ELSES'S DATA"
-//                     })
-//             } else {
-//                 User
-//                     .update(user.id)
-//             }
-//         })
-// })
+// update user info --> phone first name last name
+router.put('/users/:id', auth, (req, res, next) => {
+    const seller_id = req.params.id
+    const thisUserId = req.user.id
+    User
+        .findByPk(seller_id)
+        .then(user => {
+            if (!user) {
+                res
+                    .status(404)
+                    .send({
+                        message: "THIS USER DOES NOT EXIST"
+                    })
+            } else if (user.id !== thisUserId) {
+                res
+                    .status(404)
+                    .send({
+                        message: "YOU CANNOT EDIT SOME ONE ELSES'S DATA"
+                    })
+            } else {
+                user
+                    .update(req.body)
+                    .then(user => {
+                        res
+                            .status(200)
+                            .send({
+                                message: "YOUR PROFILE HAS BEEN UPDATED",
+                                user: user
+                            })
+                    })
+                    .catch(error => next(error))
+
+            }
+        })
+        .catch(error => next(error))
+})
 
 // '/users/:id/adverts'
 router.get('/users/:id/adverts', auth, (req, res, next) => {
@@ -187,5 +198,170 @@ router.post('/users/:id/adverts', auth, (req, res, next) => {
         .catch(error => next(error))
 })
 
+// '/users/:id/adverts/:id'
+router.get('/users/:userId/adverts/:id', auth, (req, res, next) => {
+    const seller_id = req.params.userId         //this correct?
+    const ad_id = req.params.id
+    const thisUserId = req.user.id
+
+    console.log("SELLER ID", seller_id)
+    console.log("AD ID", ad_id)
+    console.log("THIS USER ID", thisUserId)
+
+    User
+        .findByPk(seller_id)
+        .then(user => {
+            if (!user) {
+                res
+                    .status(404)
+                    .send({
+                        message: "USER WITH THIS IS DOES NOT EXIST"
+                    })
+            } else if (user.id !== thisUserId) {
+                res
+                    .status(404)
+                    .send({
+                        message: "THIS IS NOT YOUR ADVERT DUDE"
+                    })
+            } else {
+                Advert
+                    .findAll({
+                        where: {
+                            userId: user.id,
+                            id: ad_id
+                        }
+                    })
+                    .then(advert => {
+                        if (advert.length === 0) {
+                            res
+                                .status(404)
+                                .send({
+                                    message: "YOUR ADVERT WITH THIS ID DOES NOT EXIST"
+                                })
+                        } else {
+                            res
+                                .status(200)
+                                .send({
+                                    message: `YOUR ADVERT WITH ID ${ad_id}`,
+                                    advert: advert
+                                })
+                        }
+                    })
+                    .catch(error => next(error))
+            }
+        })
+        .catch(error => next(error))
+})
+
+//update advert
+router.put('/users/:userId/adverts/:id', auth, (req, res, next) => {
+    const seller_id = req.params.userId
+    const ad_id = req.params.id
+    const thisUserId = req.user.id
+
+    User
+        .findByPk(seller_id)
+        .then(user => {
+            if (!user) {
+                res
+                    .status(404)
+                    .send({
+                        message: "USER WITH THIS IS DOES NOT EXIST"
+                    })
+            } else if (user.id !== thisUserId) {
+                res
+                    .status(404)
+                    .send({
+                        message: "THIS IS NOT YOUR ADVERT DUDE"
+                    })
+            } else {
+                Advert
+                    .findAll({
+                        where: {
+                            userId: user.id,
+                            id: ad_id
+                        }
+                    })
+                    .then(advert => {
+                        if (advert.length === 0) {
+                            res
+                                .status(404)
+                                .send({
+                                    message: "YOUR ADVERT WITH THIS ID DOES NOT EXIST"
+                                })
+                        } else {
+                            advert
+                                .update(req.body)
+                                .then(advert => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            message: `YOUR ADVERT WITH ID ${ad_id} HAS BEEN UPDATED`,
+                                            advert: advert
+                                        })
+                                })
+                                .catch(error => next(error))
+                        }
+                    })
+                    .catch(error => next(error))
+            }
+        })
+        .catch(error => next(error))
+})
+
+//delete advert
+router.delete('/users/:userId/adverts/:id', auth, (req, res, next) => {
+    const seller_id = req.params.userId
+    const ad_id = req.params.id
+    const thisUserId = req.user.id
+
+    User
+        .findByPk(seller_id)
+        .then(user => {
+            if (!user) {
+                res
+                    .status(404)
+                    .send({
+                        message: "USER WITH THIS IS DOES NOT EXIST"
+                    })
+            } else if (user.id !== thisUserId) {
+                res
+                    .status(404)
+                    .send({
+                        message: "THIS IS NOT YOUR ADVERT DUDE"
+                    })
+            } else {
+                Advert
+                    .findAll({
+                        where: {
+                            userId: user.id,
+                            id: ad_id
+                        }
+                    })
+                    .then(advert => {
+                        if (advert.length === 0) {
+                            res
+                                .status(404)
+                                .send({
+                                    message: "YOUR ADVERT WITH THIS ID DOES NOT EXIST"
+                                })
+                        } else {
+                            advert
+                                .destroy()
+                                .then(response => {
+                                    res
+                                        .status(200)
+                                        .send({
+                                            message: `YOUR ADVERT WITH ID ${ad_id} HAS BEEN DELETED`
+                                        })
+                                })
+                                .catch(error => next(error))
+                        }
+                    })
+                    .catch(error => next(error))
+            }
+        })
+        .catch(error => next(error))
+})
 
 module.exports = router
