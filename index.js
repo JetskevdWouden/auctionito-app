@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const db = require('./db');
 
 
@@ -21,6 +22,7 @@ const app = express();               //this is my server
 const jsonParser = bodyParser.json()
 
 //APP.USE ROUTERS
+app.use(cors());
 app.use(jsonParser);
 app.use(authRouter);
 app.use(userRouter);
