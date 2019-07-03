@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/JetskevdWouden/auctionito-app/issues"
   },
-  "homepage": "https://github.com/JetskevdWouden/auctionito-app#readme"
+  "homepage": "https://github.com/JetskevdWouden/auctionito-app#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
