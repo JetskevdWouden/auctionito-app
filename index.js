@@ -1,6 +1,7 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const db = require('./db');
-//bodyparser
+
 
 //MODELS
 const User = require('./user/model');
@@ -8,16 +9,23 @@ const Advert = require('./advert/model');
 const ContactInfo = require('./contact_info/model');
 
 //ROUTERS
+const authRouter = require('./auth/router');
+const userRouter = require('./user/router');
+const advertRouter = require('./advert/router');
+// const contactInfoRouter = require('./contact_info/router');
+
 
 const app = express();               //this is my server
 
-
 //jsonParser
+const jsonParser = bodyParser.json()
 
 //APP.USE ROUTERS
-
-
-
+app.use(jsonParser);
+app.use(authRouter);
+app.use(userRouter);
+app.use(advertRouter);
+//app.use(contactInfoRouter);
 
 
 const port = process.env.PORT || 4000;
